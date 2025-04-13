@@ -75,6 +75,37 @@ public class CarrierFreqUtils {
     }
 
     /**
+     * Returns the carrier frequency in MHz as double, or -1.0 if unsupported or unknown.
+     *
+     * @param status Satellite signal to get the carrier frequency for
+     * @return carrier frequency in MHz, or -1.0 if not available
+     */
+    public static double getCarrierFrequencyValue(SatelliteStatus status) {
+        if(!SatelliteUtils.isCfSupported() || !status.getHasCarrierFrequency()) {
+	    return -1.0;
+	}
+
+	return MathUtils.toMhz(status.getCarrierFrequencyHz());
+    }
+
+    /**
+     * Returns the carrier frequency in MHz as a formatted string ("1575.42 MHz"),
+     * or "unsupported"/"unknown" if not available.
+     *
+     * @param status Stallite signal to get the carrier frequency for
+     * @return carrier frequency formatted as a string
+     */
+    public static String getCarrierFrequencyString(SatelliteStatus status) {
+        if(!SatelliteUtils.isCfSupported() || !status.getHasCarrierFrequency()) {
+	    return CF_UNSUPPORTED;
+	}
+
+	double cfMhz = MathUtils.toMhz(status.getCarrierFrecuencyHz());
+
+	return String.format(Locale.US, "%.3f MHz", cfMhz);
+    }
+
+    /**
      * Returns carrier frequency labels for the U.S. GPS NAVSTAR carrier frequencies
      * @param carrierFrequencyMhz carrier frequency in MHz
      * @return carrier frequency label
