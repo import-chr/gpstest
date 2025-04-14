@@ -84,10 +84,10 @@ public class CarrierFreqUtils {
      */
     public static double getCarrierFrequencyValue(SatelliteStatus status) {
         if(!SatelliteUtils.isCfSupported() || !status.getHasCarrierFrequency()) {
-	    return -1.0;
-	}
+	        return -1.0;
+	    }
 
-	return MathUtils.toMhz(status.getCarrierFrequencyHz());
+	    return MathUtils.toMhz(status.getCarrierFrequencyHz());
     }
 
     /**
@@ -99,12 +99,12 @@ public class CarrierFreqUtils {
      */
     public static String getCarrierFrequencyString(SatelliteStatus status) {
         if(!SatelliteUtils.isCfSupported() || !status.getHasCarrierFrequency()) {
-	    return CF_UNSUPPORTED;
+	        return CF_UNSUPPORTED;
 	}
 
-	double cfMhz = MathUtils.toMhz(status.getCarrierFrequencyHz());
+	    double cfMhz = MathUtils.toMhz(status.getCarrierFrequencyHz());
 
-	return String.format(Locale.US, "%.3f MHz", cfMhz);
+	    return String.format(Locale.US, "%.3f MHz", cfMhz);
     }
 
     /**
