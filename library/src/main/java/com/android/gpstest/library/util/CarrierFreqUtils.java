@@ -83,18 +83,14 @@ public class CarrierFreqUtils {
      * @return carrier frequency in MHz, or -1.0 if not available
      */
     public static double getCarrierFrequencyValue(SatelliteStatus status) {
-        if(!SatelliteUtils.isCfSupported() || !status.getHasCarrierFrequency()) {
-	        return -1.0;
-	    }
-
-	    return MathUtils.toMhz(status.getCarrierFrequencyHz());
+        return !SatelliteUtils.isCfSupported() || !status.getHasCarrierFrequency() ? -1.0 : MathUtils.toMhz(status.getCarrierFrequencyHz());
     }
 
     /**
      * Returns the carrier frequency in MHz as a formatted string ("1575.42 MHz"),
      * or "unsupported"/"unknown" if not available.
      *
-     * @param status Satallite signal to get the carrier frequency for
+     * @param status Satellite signal to get the carrier frequency for
      * @return carrier frequency formatted as a string
      */
     public static String getCarrierFrequencyString(SatelliteStatus status) {
