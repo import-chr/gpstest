@@ -22,6 +22,8 @@ import androidx.annotation.RequiresApi;
 
 import com.android.gpstest.library.model.SatelliteStatus;
 
+import java.util.Locale;
+
 public class CarrierFreqUtils {
 
     /**
@@ -92,7 +94,7 @@ public class CarrierFreqUtils {
      * Returns the carrier frequency in MHz as a formatted string ("1575.42 MHz"),
      * or "unsupported"/"unknown" if not available.
      *
-     * @param status Stallite signal to get the carrier frequency for
+     * @param status Satallite signal to get the carrier frequency for
      * @return carrier frequency formatted as a string
      */
     public static String getCarrierFrequencyString(SatelliteStatus status) {
@@ -100,7 +102,7 @@ public class CarrierFreqUtils {
 	    return CF_UNSUPPORTED;
 	}
 
-	double cfMhz = MathUtils.toMhz(status.getCarrierFrecuencyHz());
+	double cfMhz = MathUtils.toMhz(status.getCarrierFrequencyHz());
 
 	return String.format(Locale.US, "%.3f MHz", cfMhz);
     }
