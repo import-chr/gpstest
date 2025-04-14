@@ -51,6 +51,7 @@ import com.android.gpstest.library.util.CarrierFreqUtils
 import com.android.gpstest.library.util.MathUtils
 import com.android.gpstest.library.util.PreferenceUtils
 import com.android.gpstest.library.util.PreferenceUtils.gnssFilter
+import java.util.Locale
 
 @Composable
 fun StatusScreen(viewModel: SignalInfoViewModel) {
@@ -196,7 +197,7 @@ fun StatusRow(satelliteStatus: SatelliteStatus) {
 
         Svid(satelliteStatus, small)
         Flag(satelliteStatus, large)
-        CarrierFrequency(satelliteStatus, small)
+        CarrierFrequencyCombined(satelliteStatus, medium)
         Cn0(satelliteStatus, medium)
         AEU(satelliteStatus, medium)
         Elevation(satelliteStatus, medium)
@@ -316,6 +317,33 @@ fun CarrierFrequency(satelliteStatus: SatelliteStatus, modifier: Modifier) {
 }
 
 @Composable
+fun CarrierFrequencyCombined(satelliteStatus: SatelliteStatus, modifier: Modifier = Modifier) {
+    if (satelliteStatus.hasCarrierFrequency) {
+        val label = CarrierFreqUtils.getCarrierFrequencyLabel(satelliteStatus)
+        val freq = CarrierFreqUtils.getCarrierFrequencyValue(satelliteStatus)
+
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = label,
+                fontSize = 9.sp
+            )
+            if(freq >= 0) {
+                Text(
+                    text = String.format(Locale.US, "%.3f", freq),
+                    fontSize = 8.sp,
+                    color = Color.Gray
+                )
+            }
+        }
+    } else {
+        Box(modifier = modifier)
+    }
+}
+
+@Composable
 fun Cn0(satelliteStatus: SatelliteStatus, modifier: Modifier) {
     if (satelliteStatus.cn0DbHz != SatelliteStatus.NO_DATA) {
         StatusValue(String.format("%.1f", satelliteStatus.cn0DbHz), modifier)
@@ -387,7 +415,7 @@ fun StatusRowHeader(isGnss: Boolean) {
         } else {
             StatusLabel(com.android.gpstest.library.R.string.sbas_flag_image_label, large)
         }
-        StatusLabel(com.android.gpstest.library.R.string.cf_column_label, small)
+        StatusLabel(com.android.gpstest.library.R.string.cf_column_label, medium)
         StatusLabel(com.android.gpstest.library.R.string.gps_cn0_column_label, medium)
         StatusLabel(com.android.gpstest.library.R.string.flags_aeu_column_label, medium)
         StatusLabel(com.android.gpstest.library.R.string.elevation_column_label, medium)
@@ -402,7 +430,7 @@ fun StatusLabel(@StringRes id: Int, modifier: Modifier = Modifier) {
         modifier = modifier.padding(start = 3.dp, end = 3.dp),
         fontWeight = FontWeight.Bold,
         fontSize = 13.sp,
-        textAlign = TextAlign.Start
+        textAlign = TextAlign.Center
     )
 }
 
@@ -412,7 +440,7 @@ fun StatusValue(text: String, modifier: Modifier = Modifier) {
         text = text,
         modifier = modifier.padding(start = 3.dp, end = 3.dp),
         fontSize = 13.sp,
-        textAlign = TextAlign.Start
+        textAlign = TextAlign.Center
     )
 }
 
