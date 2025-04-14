@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.hardware.ConsumerIrManager.CarrierFrequencyRange
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -46,6 +47,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -208,7 +210,7 @@ fun StatusRow(satelliteStatus: SatelliteStatus) {
 
         Svid(satelliteStatus, small)
         Flag(satelliteStatus, large)
-        CarrierFrequency(satelliteStatus, small)
+        CarrierFrequencyCombined(satelliteStatus, small)
         Cn0(satelliteStatus, medium)
         AEU(satelliteStatus, medium)
     }
@@ -234,6 +236,32 @@ fun CarrierFrequency(satelliteStatus: SatelliteStatus, modifier: Modifier) {
         Box(
             modifier = modifier
         )
+    }
+}
+
+@Composable
+fun CarrierFrequencyCombined(satelliteStatus: SatelliteStatus, modifier: Modifier) {
+    if(satelliteStatus.hasCarrierFrequency) {
+        val carrierLabel = CarrierFreqUtils.getCarrierFrequencyLabel(satelliteStatus)
+        val carrierMhz = MathUtils.toMhz(satelliteStatus.carrierFrequencyHz)
+
+        Row(modifier = modifier) {
+            StatusValue(
+                text = carrierLabel,
+                modifier = Modifier.weight(1f)
+            )
+
+            Text(
+                text = String.format(Locale.US, "%.3f", carrierMhz),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 3.dp, end = 2.dp),
+                fontSize = 9.sp,
+                textAlign = TextAlign.Start
+            )
+        }
+    } else {
+        Box(modifier = modifier)
     }
 }
 
